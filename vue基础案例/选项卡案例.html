@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="http://unpkg.com/view-design/dist/styles/iview.css">
+    <script type="text/javascript" src="http://vuejs.org/js/vue.min.js"></script>
+    <script type="text/javascript" src="http://unpkg.com/view-design/dist/iview.min.js"></script>
+    <title>Document</title>
+    <style> 
+    ul,span {
+        padding: 0;
+        margin: 0;
+    }
+    a{
+        text-decoration: none;
+        color: #000;
+    }
+    html,body {
+        margin: 0;
+        padding: 0;
+        width:100%;
+	    height:100%;
+     }
+     body {
+        background: url(./images/bg.jpg) no-repeat;
+        background-size: 100%;
+     }
+     #app {
+         margin: auto;
+         margin-top: 100px;
+         width: 800px;
+         height: 400px;
+     }
+     #app .header{
+        padding: 0 30px;
+        height: 60px;
+        background-color: rgba(173, 171, 171, 0.8);
+        line-height: 60px;
+        font-size: 16px;
+     }
+     #app .body{
+        padding: 10px 30px;
+         background-color: rgba(255, 255, 255, .6);
+     }
+     .navList{
+         height: 40px;
+         text-align: left;
+         font-size: 14px;
+     }
+     .navList span{
+         display: inline-block;
+         height: 40px;
+         text-align: bottom;
+         line-height: 40px;
+         /* 设置这个属性，可以让span与div中的最高元素对齐 */
+         vertical-align:top; 
+         color: #5e5b5b;
+     }
+     .body ul {
+         display: inline-block;
+         list-style: none;
+         height: 40px;
+         line-height: 40px;
+     }
+     .body ul li {
+         float: left;
+         margin-left: 18px;
+     }
+     .focus {
+         color: steelblue;
+     }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="header">
+            你的选择：
+            <Tag v-for="item,i in tagList" type="border" closable color="primary" @on-close="handleClose(i)">{{ item }}</Tag>
+        </div>
+        <div class="body">
+            <div class="navList" v-for=" item,i in navList">
+                <span>{{ item.title }}:</span>
+                <ul>
+                    <li v-for="product,s in item.products" class="title"><a href="javascript:void(0)" :class="{focus:item.index === s}" @click="chooseHandler(i,s,product)">{{ product }}</a></li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+    <!-- <script src="../vue.js"></script> -->
+    <script>
+        var data = [
+            {
+              'title':'品牌',
+              'products':['苹果','小米','锤子','魅族','华为','三星','oppo','vivo','乐视','360','中兴','索尼'],
+              'index': -1
+            },
+            {
+              'title':'尺寸',
+              'products':['3.0英寸一下','3.0-3.9英寸','4.0-4.5英寸','4.6-4.9英寸','5.0-5.5英寸','6.0英寸以上'],
+              'index': -1
+            },
+            {
+              'title':'系统',
+              'products':['安卓(Android)','苹果(IOS)','微软(WindowsPhone)','其他','无'],
+              'index': -1
+            },
+            {
+              'title':'网络',
+              'products':['联通3G','双卡单4G','双卡双4G','联通4G','电信4G','移动4G'],
+              'index': -1
+            }
+        ]
+        var vm = new Vue({
+            el:'#app',
+            data:{
+                navList:data,
+                tagList:{}
+            },
+            methods: {
+                chooseHandler(i,s,product){
+                    this.$set(this.navList[i],'index',s);
+                    this.$set(this.tagList,i,product)
+                },
+                handleClose(i){
+                    this.$delete(this.tagList,i);
+                    this.$set(this.navList[i],'index',-1);
+                }
+            },
+        })
+    </script>
+</body>
+</html>

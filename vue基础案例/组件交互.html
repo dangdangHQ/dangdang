@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="http://unpkg.com/view-design/dist/styles/iview.css">
+    <script type="text/javascript" src="http://vuejs.org/js/vue.min.js"></script>
+    <script type="text/javascript" src="http://unpkg.com/view-design/dist/iview.min.js"></script>
+    <title>组件交互</title>
+    <style>
+        .message-box{
+            margin-top: 30px;
+            width:200px;
+            height: 30px;
+            margin:0 auto;
+            background-color: green;
+            text-align: center;
+            line-height: 30px;
+            color: #FFF;
+        }
+        .message-cancle{
+            width: 30px;
+            height: 30px;
+            float: right;
+            margin-right: 5px;
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <message v-if="show" :show.syanc="show">
+            新增成功
+        </message>
+        <!-- <input type="text" v-model="course"/> <button @click="addCourse()">新增</button> -->
+        <add-course v-model="course" @add-course="addCourse"></add-course>
+        <p>展示列表：</p>
+        <div v-for="item in coursesList" :key="item">{{ item }}</div>
+    </div>
+    
+    <script>
+        Vue.component('message',{
+            props:['show'],
+            template:`
+                <div class="message-box" v-if="show">
+                <slot></slot>
+                <span class="message-cancle" @click="">取消</span>
+                </div>
+            `
+        })
+        Vue.component('add-course',{
+            // 用model可以重新定义，父级展开的时候，绑定的数据和事件
+            // modol中的prop值必须与props保持一致
+            model:{
+                prop : "value",
+                event : "input"
+            },
+            props:{
+                value:{
+                    type:String,
+                    default:''
+                } 
+            },
+            // data(){
+            //     return {
+            //         course:''
+            //     }
+            // },
+            methods: {
+                addCourse1(){
+                    this.$emit('add-course');
+                    // this.course = ''
+                },
+                inputHandle(e){
+                    this.$emit('input',e.target.value)
+                }
+            },
+            template:`<div><input type="text" @input="inputHandle" :value='value'/><button @click="addCourse1">新增</button></div>`
+        })
+        var vm = new Vue({
+            el:"#app",
+            data:{
+                course:'',
+                coursesList:['全栈架构师','前端高级'],
+                inputValue:'',
+                show:false
+            },
+            methods: {
+                addCourse(){
+                    this.coursesList.push(this.course);
+                    this.course = '';
+                    this.show = true
+                }
+            },
+        })
+    </script>
+</body>
+</html>

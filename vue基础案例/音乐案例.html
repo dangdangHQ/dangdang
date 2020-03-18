@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="http://unpkg.com/view-design/dist/styles/iview.css">
+    <script type="text/javascript" src="http://vuejs.org/js/vue.min.js"></script>
+    <script type="text/javascript" src="http://unpkg.com/view-design/dist/iview.min.js"></script>
+    <title>音乐案例</title>
+    <style> 
+   .count {
+    width: 600px;
+    height: 80px;
+   }
+   .count span{
+       display: inline-block;
+       height: 80px;
+       line-height: 80px;
+       width: 100px;
+   }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <i-table border  :columns="columns4" :data="songList" @on-selection-change="selected"></i-table>
+        <div class="count">
+            <span>已选择：{{ selectedNum }}</span>
+            <span>已选歌手:{{ allSongs }}</span>
+            <span>总发行量：{{ allColumns }}</span>
+            <span>watch已选歌手：{{ allsingers }}</span>
+        </div>
+    </div>
+    <script>
+        var data = [
+            {
+                id:'1',
+                name:'李白',
+                singer:'李荣浩',
+                column:10,
+                flag:false
+            },
+            {
+                id:'2',
+                name:'泡沫',
+                singer:'邓紫棋',
+                column:20,
+                flag:false
+            },
+            {
+                id:'3',
+                name:'麻雀',
+                singer:'李荣浩',
+                column:30,
+                flag:false
+            },
+            {
+                id:'4',
+                name:'明天过后',
+                singer:'张杰',
+                column:10,
+                flag:false
+            }
+        ]
+        var vm = new Vue({
+            el:'#app',
+            data:{
+                columns4: [
+                    {
+                        type: 'selection',
+                        width: 60,
+                        align: 'center'
+                    },
+                    {
+                        title: '歌名',
+                        key: 'name'
+                    },
+                    {
+                        title: '歌手',
+                        key: 'singer'
+                    },
+                    {
+                        title: '发行量',
+                        key: 'column'
+                    }
+                ],
+                songList:data,
+                selection:[],
+                allsingers:'0'
+            },
+            methods: {
+                selected(selection){
+                    this.selection = selection;
+                }
+            },
+            // 计算属性具有缓存性，
+            computed: {
+                selectedNum:function(){
+                    return this.selection.length;
+                },
+                allColumns:function(){
+                    let count = 0;
+                    this.selection.forEach(element => {
+                        count += element.column
+                    });
+                    return count;
+                },
+                allSongs:function(){
+                    // 利用Set可以去重操作
+                    let singers = new Set();
+                    this.selection.forEach(item => {
+                        singers.add(item.singer)
+                    })
+                    return singers.size;
+            },
+            },
+            // 默认是被监听的数据发生变化时才会执行，首次的时候不会执行
+            // watch: {
+            //     selection(newValue, oldValue) {
+                    
+            //     }
+            // },
+           watch: {
+            selection: {
+                   immediate: true, //表示会立即执行
+                   deep: true,//当监听的数据层级比较深的时候，我们希望最深层的数据发生变化的时候也监听，需要开启这个选项
+                   handler(newValue, oldValue) {
+                    let singers = new Set();
+                    newValue.forEach(item => {
+                        singers.add(item.singer)
+                    })
+                    this.allsingers = singers.size;
+                   }
+               }
+           },
+        })
+    </script>
+</body>
+</html>
