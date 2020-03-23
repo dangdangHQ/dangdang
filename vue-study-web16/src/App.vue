@@ -5,7 +5,8 @@
     <communication></communication>
     <slot-example></slot-example> -->
     <!-- <form-example></form-example> -->
-    <Alert></Alert>
+    <!-- <Alert></Alert> -->
+    <Loading></Loading>
   </div>
 </template>
 
@@ -15,6 +16,8 @@ import communication from '@/components/communication';
 import SlotExample from '@/components/slots'
 import FormExample from '@/components/form'
 import Alert from '@/components/alert'
+import Loading from '@/components/loading/index.vue'
+import './iconfonts/iconfont.css'
 
 export default {
   name: 'app',
@@ -23,7 +26,8 @@ export default {
     communication,
     SlotExample,
     FormExample,
-    Alert
+    Alert,
+    Loading
   }
 }
 </script>
